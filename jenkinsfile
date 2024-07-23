@@ -1,0 +1,32 @@
+pipeline {
+    agent 
+	{
+		node {
+			label 'TestNode' 
+		}
+	}
+	parameters 
+	{
+		booleanParam(defaultValue: true, description: 'Build SSIS', name: 'BUILD')
+		booleanParam(defaultValue: false, description: 'Deploy SSIS', name: 'DEPLOY')
+	}
+	environment {
+		SSISBuildPath="C:\\SSIS_DEV_OPS\\SSISBuild.exe"
+		SSISDeployPath="C:\\SSIS_DEV_OPS\\ssisdeploy.exe"
+		SOLUTION = "AUDIT_Import_ALL\\AUDIT_Import_ALL.dtproj"
+	}
+	stages {
+    stage('Checkout') 
+	{ 
+		steps 
+		{
+			bat 'del /F /S /Q *.*'
+			bat 'for /d %%x in (.\\*) do @rd /s /q %%x'
+			echo 'step Git Checkout'
+			checkout scm
+		}
+	}
+    stage('Build') { }
+    stage('Deploy') { }
+}
+}
